@@ -92,7 +92,7 @@ const [showSearch, setShowSearch] = useState(false);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-  fetch("http://localhost:3000/products")
+  fetch("https://my-backend-j4fz.onrender.com/products")
     .then(res => res.json())
     .then(data => {
       console.log(data);   // ← добавь

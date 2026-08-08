@@ -31,7 +31,7 @@ useEffect(() => {
 
   const loadProducts = async () => {
     try {
-      const res = await fetch("http://localhost:3000/products");
+      const res = await fetch("https://my-backend-j4fz.onrender.com/products");
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -61,14 +61,14 @@ formData.append("description", product.description);
 formData.append("featured", product.featured);
 
       if (editingId) {
-        await fetch(`http://localhost:3000/products/${editingId}`, {
+        await fetch(`https://my-backend-j4fz.onrender.com/products/${editingId}`, {
           method: "PUT",
           body: formData,
       });
 
         alert("Товар обновлен");
       } else {
-        await fetch("http://localhost:3000/products", {
+        await fetch("https://my-backend-j4fz.onrender.com/products", {
           method: "POST",
           body: formData,
         });
@@ -109,7 +109,7 @@ formData.append("featured", product.featured);
   const deleteProduct = async (id) => {
     if (!window.confirm("Удалить товар?")) return;
 
-    await fetch(`http://localhost:3000/products/${id}`, {
+    await fetch(`https://my-backend-j4fz.onrender.com/products/${id}`, {
       method: "DELETE",
     });
 
