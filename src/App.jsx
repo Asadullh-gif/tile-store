@@ -10,7 +10,7 @@ import Admin from "./pages/Admin/admin.jsx";
 import Cart from "./pages/Cart/Cart";
 import Login from "./pages/Login/Login";
 import { Link, useLocation } from "react-router-dom";
-import Collections from "./pages/Collections/Collections.jsx";
+import Collections from "./pages/Collections/collections.jsx";
 import Constructor from "./pages/Constructor/Constructor.jsx";
 import Footer from "./Components/UI/Footer";
 
