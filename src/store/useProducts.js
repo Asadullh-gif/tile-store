@@ -5,7 +5,7 @@ export default function useProducts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://my-backend-j4fz.onrender.com")
+    fetch("https://my-backend-j4fz.onrender.com/products")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);

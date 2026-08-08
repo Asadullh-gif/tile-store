@@ -19,7 +19,7 @@ const addToCart = (product) => {
   alert("Товар добавлен в корзину");
 };
 
-    fetch("https://my-backend-j4fz.onrender.com")
+    fetch("https://my-backend-j4fz.onrender.com/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
