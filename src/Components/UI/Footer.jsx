@@ -20,7 +20,7 @@ export default function Footer() {
       </h1>
 
       <p>📍 Алматы, Казахстан</p>
-      <p>📞 +7 (707) 912-98-28</p>
+      <p>📞 +7 (707) 912-92-28</p>
 
       <div
         style={{
@@ -41,7 +41,7 @@ export default function Footer() {
         </a>
 
         <a
-          href="https://wa.me/77079129828"
+          href="https://wa.me/77079129228"
           target="_blank"
           rel="noreferrer"
         >
