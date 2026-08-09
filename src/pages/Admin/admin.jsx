@@ -23,6 +23,7 @@ function Admin() {
 useEffect(() => {
   if (localStorage.getItem("admin") !== "true") {
     navigate("/login");
+
     return;
   }
 
