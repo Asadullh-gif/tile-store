@@ -280,9 +280,9 @@ if (sort === "name") {
             }}
           >
             <img
-  src={product.image}
-  alt={product.name}
-  onClick={() => setSelectedImage(product.image)}
+  src={item.image}
+  alt={item.name}
+  onClick={() => setSelectedImage(item.image)}
   style={{
     width: "100%",
     height: "250px",
@@ -336,56 +336,53 @@ if (sort === "name") {
         ))}
       </div>
 
-{selectedImage && (
+     {selectedImage && (
   <div
     onClick={() => setSelectedImage(null)}
     style={{
       position: "fixed",
       inset: 0,
-      background: "rgba(0, 0, 0, 0.88)",
+      background: "rgba(0,0,0,0.85)",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      zIndex: 99999,
-      padding: "40px",
+      zIndex: 10000,
       cursor: "zoom-out",
+      padding: "30px",
     }}
   >
-    {/* Кнопка закрытия */}
+    <img
+      src={selectedImage}
+      alt="Увеличенное изображение"
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        maxWidth: "90%",
+        maxHeight: "90%",
+        objectFit: "contain",
+        borderRadius: "0px",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+      }}
+    />
+
     <button
       onClick={() => setSelectedImage(null)}
       style={{
         position: "absolute",
         top: "25px",
         right: "30px",
-        width: "55px",
-        height: "55px",
+        width: "50px",
+        height: "50px",
         borderRadius: "50%",
         border: "none",
         background: "#d4b483",
         color: "#111",
-        fontSize: "32px",
+        fontSize: "28px",
         cursor: "pointer",
-        zIndex: 100000,
+        fontWeight: "bold",
       }}
     >
       ×
     </button>
-
-    {/* Большая картинка */}
-    <img
-      src={selectedImage}
-      alt="Увеличенная плитка"
-      onClick={(e) => e.stopPropagation()}
-      style={{
-        maxWidth: "90%",
-        maxHeight: "90%",
-        objectFit: "contain",
-        borderRadius: "20px",
-        boxShadow: "0 30px 100px rgba(0,0,0,0.7)",
-        cursor: "default",
-      }}
-    />
   </div>
 )}
 
