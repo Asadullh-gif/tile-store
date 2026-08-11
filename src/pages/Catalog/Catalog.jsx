@@ -359,7 +359,7 @@ if (sort === "name") {
         maxWidth: "90%",
         maxHeight: "90%",
         objectFit: "contain",
-        borderRadius: "0px",
+        borderRadius: "15px",
         boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
       }}
     />

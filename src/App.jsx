@@ -87,6 +87,7 @@ function NavItem({ to, children }) {
 
 function Home({cart, setCart}) {
   
+  const [selectedImage, setSelectedImage] = useState(null);
 const [search, setSearch] = useState("");
 const [showSearch, setShowSearch] = useState(false);
 const [mobileMenuOpen, setMobileMenu] = useState(false);
@@ -876,7 +877,7 @@ className="des"
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            borderRadius:"20px",
+            borderRadius:"15px",
             marginBottom:"25px"
           }}
         />
@@ -921,12 +922,14 @@ className="des"
             <img 
             src={product.image} 
             alt={product.name} 
+              onClick={() => setSelectedImage(product.image)}
+
             style={{
               width: "90%", 
               height: "220px", 
               objectFit: "cover", 
-              borderRadius: "20px", 
-              marginBottom: "25px", 
+              borderRadius: "15px", 
+              marginBottom: "20px", 
               }} 
               /> 
               <h1 
@@ -985,10 +988,67 @@ className="des"
                   
                 ))}
               </div>
+
+
             </section>
+
+            {selectedImage && (
+  <div
+    onClick={() => setSelectedImage(null)}
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.85)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 99999,
+      cursor: "zoom-out",
+      padding: "40px",
+    }}
+  >
+    <img
+      src={selectedImage}
+      alt="Увеличенное изображение"
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        maxWidth: "90%",
+        maxHeight: "90%",
+        objectFit: "contain",
+        borderRadius: "0px",
+        boxShadow: "0 20px 80px rgba(0,0,0,0.7)",
+      }}
+    />
+
+    <button
+      onClick={() => setSelectedImage(null)}
+      style={{
+        position: "absolute",
+        top: "30px",
+        right: "30px",
+        width: "50px",
+        height: "50px",
+        borderRadius: "50%",
+        border: "none",
+        background: "#d4b483",
+        color: "#111",
+        fontSize: "25px",
+        fontWeight: "bold",
+        cursor: "pointer",
+      }}
+    >
+      ✕
+    </button>
+  </div>
+)}
+
+<Footer />
 
   
 <Footer />
+
+
+
 
 </div>
    
