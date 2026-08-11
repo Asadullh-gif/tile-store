@@ -182,3 +182,133 @@
     border-right-color: var(--border);
   }
 }
+
+
+
+/* =========================
+   МОБИЛЬНАЯ ВЕРСИЯ
+========================= */
+
+.mobile-menu-button {
+  display: none;
+}
+
+/* Компьютер */
+.desktop-nav {
+  display: flex;
+}
+
+.desktop-search {
+  display: block;
+}
+
+
+/* =========================
+   ТЕЛЕФОН
+========================= */
+
+@media (max-width: 768px) {
+
+  /* Шапка */
+  header {
+    height: 70px !important;
+    padding: 0 18px !important;
+  }
+
+  /* Логотип */
+  header h2 {
+    font-size: 32px !important;
+  }
+
+  /* Скрываем компьютерное меню */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Скрываем поиск */
+  .desktop-search {
+    display: none !important;
+  }
+
+  /* Кнопка ☰ */
+  .mobile-menu-button {
+    display: flex !important;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.08);
+    color: white;
+
+    font-size: 26px;
+
+    cursor: pointer;
+  }
+
+  /* Чтобы логотип и кнопка были по краям */
+  header {
+    justify-content: space-between !important;
+  }
+
+  /* Главный экран */
+  header + section {
+    height: 100vh !important;
+    min-height: 700px !important;
+    padding: 0 25px !important;
+  }
+
+  header + section > div:nth-child(2) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  header + section span {
+    font-size: 15px !important;
+    letter-spacing: 2px !important;
+  }
+
+  header + section h1 {
+    font-size: 40px !important;
+    line-height: 1.1 !important;
+  }
+
+  header + section p {
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+    max-width: 100% !important;
+  }
+
+  header + section button {
+    font-size: 17px !important;
+    padding: 16px 25px !important;
+  }
+
+  /* Секции */
+  section {
+    padding: 70px 20px !important;
+  }
+
+  section h2 {
+    font-size: 36px !important;
+  }
+
+  /* Не даём странице вылезать вправо */
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+

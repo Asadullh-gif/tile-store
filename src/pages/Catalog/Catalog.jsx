@@ -12,12 +12,13 @@ const [sort, setSort] = useState("popular");
 const [minPrice, setMinPrice] = useState("");
 const [maxPrice, setMaxPrice] = useState("");
 
-  useEffect(() => {
 const addToCart = (product) => {
-  setCart([...cart, product]);
-
+  setCart((prevCart) => [...prevCart, product]);
   alert("Товар добавлен в корзину");
 };
+
+  useEffect(() => {
+
 
     fetch("https://my-backend-j4fz.onrender.com/products")
       .then((res) => res.json())

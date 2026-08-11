@@ -17,6 +17,7 @@ function Admin() {
   const [product, setProduct] = useState(emptyProduct);
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
  const navigate = useNavigate();
 
@@ -53,13 +54,16 @@ const formData = new FormData();
 
 formData.append("name", product.name);
 formData.append("price", product.price);
-formData.append("image", product.image);
 formData.append("size", product.size);
 formData.append("material", product.material);
 formData.append("room", product.room);
 formData.append("type", product.type);
 formData.append("description", product.description);
 formData.append("featured", product.featured);
+
+if (imageFile) {
+  formData.append("image", imageFile);
+}
 
       if (editingId) {
         await fetch(`https://my-backend-j4fz.onrender.com/products/${editingId}`, {
@@ -88,6 +92,7 @@ formData.append("featured", product.featured);
 
   const editProduct = (item) => {
     setEditingId(item._id);
+    setImageFile(null); // Сбросить выбранный файл изображения при редактировании
 
     setProduct({
       name: item.name,
@@ -182,12 +187,9 @@ formData.append("featured", product.featured);
        <input
   type="file"
   accept="image/*"
-  onChange={(e) =>
-    setProduct({
-      ...product,
-      image: e.target.files[0],
-    })
-  }
+  onChange={(e) => {
+    setImageFile(e.target.files[0]);
+  }}
 />
         <input
           name="size"

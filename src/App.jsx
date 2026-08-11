@@ -86,8 +86,10 @@ function NavItem({ to, children }) {
 }
 
 function Home({cart, setCart}) {
+  
 const [search, setSearch] = useState("");
 const [showSearch, setShowSearch] = useState(false);
+const [mobileMenuOpen, setMobileMenu] = useState(false);
 
   const [products, setProducts] = useState([]);
 
@@ -191,7 +193,15 @@ const addToCart = (product) => {
   TileStore
 </h2>
 
+<button
+  className="mobile-menu-button"
+  onClick={() => setMobileMenu(!mobileMenuOpen)}
+>
+  {mobileMenuOpen ? "✕" : "☰"}
+</button>
+
   <nav
+  className="desktop-nav"
   style={{
     display: "flex",
     alignItems: "center",
@@ -336,7 +346,10 @@ const addToCart = (product) => {
   </Link>
 </nav>
 
+
+
 <div
+className="des"
   style={{
     position: "relative",
   }}
@@ -421,6 +434,54 @@ const addToCart = (product) => {
 </div>
 
 </header>
+
+{mobileMenuOpen && (
+  <div className="mobile-menu">
+
+    <Link
+      to="/"
+      onClick={() => setMobileMenu(false)}
+    >
+      🏠 Главная
+    </Link>
+
+    <Link
+      to="/catalog"
+      onClick={() => setMobileMenu(false)}
+    >
+      🧱 Каталог
+    </Link>
+
+    <Link
+      to="/collections"
+      onClick={() => setMobileMenu(false)}
+    >
+      ✨ Коллекции
+    </Link>
+
+    <Link
+      to="/constructor"
+      onClick={() => setMobileMenu(false)}
+    >
+      🎨 Конструктор
+    </Link>
+
+    <Link
+      to="/cart"
+      onClick={() => setMobileMenu(false)}
+    >
+      🛒 Корзина
+    </Link>
+
+    <a
+      href="#contacts"
+      onClick={() => setMobileMenu(false)}
+    >
+      📞 Контакты
+    </a>
+
+  </div>
+)}
 
       <section
   style={{
