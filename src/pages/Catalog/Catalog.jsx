@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 
 function Catalog({cart, setCart}) {
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [room, setRoom] = useState("Все");
@@ -279,14 +280,17 @@ if (sort === "name") {
             }}
           >
             <img
-              src={item.image}
-              alt={item.name}
-              style={{
-                width: "100%",
-                height: "220px",
-                objectFit: "cover",
-              }}
-            />
+  src={product.image}
+  alt={product.name}
+  onClick={() => setSelectedImage(product.image)}
+  style={{
+    width: "100%",
+    height: "250px",
+    objectFit: "cover",
+    cursor: "zoom-in",
+    borderRadius: "15px",
+  }}
+/>
 
             <div style={{ padding: "20px" }}>
               <h2
@@ -331,6 +335,60 @@ if (sort === "name") {
           </div>
         ))}
       </div>
+
+{selectedImage && (
+  <div
+    onClick={() => setSelectedImage(null)}
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0, 0, 0, 0.88)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 99999,
+      padding: "40px",
+      cursor: "zoom-out",
+    }}
+  >
+    {/* Кнопка закрытия */}
+    <button
+      onClick={() => setSelectedImage(null)}
+      style={{
+        position: "absolute",
+        top: "25px",
+        right: "30px",
+        width: "55px",
+        height: "55px",
+        borderRadius: "50%",
+        border: "none",
+        background: "#d4b483",
+        color: "#111",
+        fontSize: "32px",
+        cursor: "pointer",
+        zIndex: 100000,
+      }}
+    >
+      ×
+    </button>
+
+    {/* Большая картинка */}
+    <img
+      src={selectedImage}
+      alt="Увеличенная плитка"
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        maxWidth: "90%",
+        maxHeight: "90%",
+        objectFit: "contain",
+        borderRadius: "20px",
+        boxShadow: "0 30px 100px rgba(0,0,0,0.7)",
+        cursor: "default",
+      }}
+    />
+  </div>
+)}
+
     </div>
   );
 }
