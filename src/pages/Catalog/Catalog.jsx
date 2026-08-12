@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 function Catalog({cart, setCart}) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedInterior, setSelectedInterior] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [room, setRoom] = useState("Все");
@@ -313,6 +314,29 @@ if (sort === "name") {
               <h3 style={{ color: "#d4b483" }}>
                 {item.price} ₸
               </h3>
+
+{item.interiorImage && (
+  <button
+    onClick={() => setSelectedInterior(item.interiorImage)}
+    style={{
+      width: "100%",
+      marginTop: "15px",
+      padding: "15px",
+      background: "transparent",
+      color: "#d4b483",
+      border: "1px solid #d4b483",
+      borderRadius: "12px",
+      cursor: "pointer",
+      fontWeight: "600",
+      fontSize: "16px",
+    }}
+  >
+    🛁 Посмотреть интерьер
+  </button>
+)}
+
+
+
 <button
   onClick={() => addToCart(item)}
   style={{
@@ -385,6 +409,61 @@ if (sort === "name") {
     </button>
   </div>
 )}
+
+{selectedInterior && (
+  <div
+    onClick={() => setSelectedInterior(null)}
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.9)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 10000,
+      padding: "30px",
+    }}
+  >
+
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelectedInterior(null);
+      }}
+      style={{
+        position: "absolute",
+        top: "25px",
+        right: "30px",
+        width: "50px",
+        height: "50px",
+        borderRadius: "50%",
+        border: "none",
+        background: "#d4b483",
+        color: "#111",
+        fontSize: "28px",
+        cursor: "pointer",
+        fontWeight: "bold",
+      }}
+    >
+      ×
+    </button>
+
+    <img
+      src={selectedInterior}
+      alt="Интерьер"
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        maxWidth: "95%",
+        maxHeight: "90vh",
+        objectFit: "contain",
+        borderRadius: "15px",
+        boxShadow: "0 20px 80px rgba(0,0,0,0.6)",
+      }}
+    />
+
+  </div>
+)}
+
 
     </div>
   );

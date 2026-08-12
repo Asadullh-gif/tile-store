@@ -18,6 +18,7 @@ function Admin() {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const [interiorImageFile, setInteriorImageFile] = useState(null);
 
  const navigate = useNavigate();
 
@@ -65,6 +66,11 @@ if (imageFile) {
   formData.append("image", imageFile);
 }
 
+
+if (interiorImageFile) {
+  formData.append("interiorImage", interiorImageFile);
+}
+
       if (editingId) {
         await fetch(`https://my-backend-j4fz.onrender.com/products/${editingId}`, {
           method: "PUT",
@@ -93,6 +99,7 @@ if (imageFile) {
   const editProduct = (item) => {
     setEditingId(item._id);
     setImageFile(null); // Сбросить выбранный файл изображения при редактировании
+    setInteriorImageFile(null); // Сбросить выбранный файл внутреннего изображения при редактировании
 
     setProduct({
       name: item.name,
@@ -191,6 +198,25 @@ if (imageFile) {
     setImageFile(e.target.files[0]);
   }}
 />
+
+<label
+  style={{
+    color: "#d4b483",
+    fontWeight: "600",
+    fontSize: "18px",
+  }}
+>
+  Фото интерьера
+</label>
+
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    setInteriorImageFile(e.target.files[0]);
+  }}
+/>
+
         <input
           name="size"
           placeholder="Размер"
