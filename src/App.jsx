@@ -1041,10 +1041,6 @@ className="des"
     </button>
   </div>
 )}
-
-<Footer />
-
-  
 <Footer />
 
 
