@@ -263,13 +263,10 @@ const PORT = process.env.PORT || 3000;
 
 
 
-const PORT = process.env.PORT || 3000;
+
 
 console.log("🚀 SERVER VERSION 2 - upload.any()");
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
-});
 
 
 app.listen(PORT, "0.0.0.0", () => {
