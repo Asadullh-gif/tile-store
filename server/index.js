@@ -54,86 +54,131 @@ mongoose
 // ДОБАВИТЬ ТОВАР
 // =========================
 
-app.post("/products", upload.single("image"), async (req, res) => {
-  try {
+app.post(
+  "/products",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "interiorImage", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      console.log("🔥 POST /products ПОЛУЧЕН");
+      console.log("Файлы:", req.files);
+      console.log("Body:", req.body);
 
-    console.log("🔥 POST /products ПОЛУЧЕН");
-    console.log("Файл:", req.file);
-    console.log("Body:", req.body);
+      const product = new Product({
+        name: req.body.name,
+        price: req.body.price,
+        size: req.body.size,
+        material: req.body.material,
+        room: req.body.room,
+        type: req.body.type,
+        description: req.body.description,
+        featured: req.body.featured === "true",
 
+        image: req.files?.image?.[0]?.path || "",
 
+        interiorImage:
+          req.files?.interiorImage?.[0]?.path || "",
+      });
 
-    const product = new Product({
-      name: req.body.name,
-      price: req.body.price,
-      size: req.body.size,
-      material: req.body.material,
-      room: req.body.room,
-      type: req.body.type,
-      description: req.body.description,
-      featured: req.body.featured === "true",
+      await product.save();
 
-      // Cloudinary URL
-      image: req.file ? req.file.path : "",
-      interiorImage: req.files?.interiorImage?.[0]?.path || "",
-    });
+      console.log("🔥 Товар успешно добавлен:", product);
 
-    await product.save();
+      res.json(product);
+    } catch (err) {
+      console.log("❌ Ошибка:", err);
 
-    console.log("🔥 Товар успешно добавлен:", product);
-
-    res.json(product);
-  } catch (err) {
-    console.log(err);
-
-    res.status(500).json({
-      message: err.message,
-    });
+      res.status(500).json({
+        message: err.message,
+      });
+    }
   }
-});
+);
 
 // =========================
 // ИЗМЕНИТЬ ТОВАР
 // =========================
 
-app.put("/products/:id", upload.single("image"), async (req, res) => {
-  try {
-    const updateData = {
-      name: req.body.name,
-      price: req.body.price,
-      size: req.body.size,
-      material: req.body.material,
-      room: req.body.room,
-      type: req.body.type,
-      description: req.body.description,
-      featured: req.body.featured === "true",
-    };
+app.put(
+  "/products/:id",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "interiorImage", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      console.log("🔥 PUT /products/:id");
+      console.log("ID:", req.params.id);
+      console.log("BODY:", req.body);
+      console.log("FILES:", req.files);
 
-    // Если загрузили новую картинку
-    if (req.file) {
-      updateData.image = req.file.path;
+      const updateData = {
+        name: req.body.name,
+        price: req.body.price,
+        size: req.body.size,
+        material: req.body.material,
+        room: req.body.room,
+        type: req.body.type,
+        description: req.body.description,
+        featured: req.body.featured === "true",
+      };
+
+      // =========================
+      // НОВАЯ ГЛАВНАЯ ФОТОГРАФИЯ
+      // =========================
+
+      if (req.files?.image?.[0]) {
+        updateData.image = req.files.image[0].path;
+
+        console.log(
+          "🖼 Новая image:",
+          updateData.image
+        );
+      }
+
+      // =========================
+      // НОВАЯ ФОТОГРАФИЯ ИНТЕРЬЕРА
+      // =========================
+
+      if (req.files?.interiorImage?.[0]) {
+        updateData.interiorImage =
+          req.files.interiorImage[0].path;
+
+        console.log(
+          "🏠 Новая interiorImage:",
+          updateData.interiorImage
+        );
+      }
+
+      const product = await Product.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      if (!product) {
+        return res.status(404).json({
+          message: "Товар не найден",
+        });
+      }
+
+      console.log("✅ Товар после изменения:", product);
+
+      res.json(product);
+    } catch (err) {
+      console.log("❌ Ошибка PUT:", err);
+
+      res.status(500).json({
+        message: err.message,
+      });
     }
-
-    if (req.files && req.files.interiorImages) {
-      updateData.interiorImage = req.files.interiorImage[0].path;
-    }
-
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true }
-    );
-
-    res.json(product);
-  } catch (err) {
-    console.log(err);
-
-    res.status(500).json({
-      message: err.message,
-    });
   }
-});
-
+);
 // =========================
 // ПОЛУЧИТЬ ТОВАРЫ
 // =========================
