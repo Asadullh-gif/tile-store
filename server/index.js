@@ -41,6 +41,11 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+
+const getFileByField = (files, fieldname) => {
+  return files?.find((file) => file.fieldname === fieldname);
+};
+
 // =========================
 // MONGODB
 // =========================
@@ -255,7 +260,13 @@ const PORT = process.env.PORT || 3000;
 
 
 
+const PORT = process.env.PORT || 3000;
 
+console.log("🚀 SERVER VERSION 2 - upload.any()");
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
+});
 
 
 app.listen(PORT, "0.0.0.0", () => {
