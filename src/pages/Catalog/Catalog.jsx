@@ -315,26 +315,29 @@ if (sort === "name") {
                 {item.price} ₸
               </h3>
 
-{item.interiorImage && (
-  <button
-    onClick={() => setSelectedInterior(item.interiorImage)}
-    style={{
-      width: "100%",
-      marginTop: "15px",
-      padding: "15px",
-      background: "transparent",
-      color: "#d4b483",
-      border: "1px solid #d4b483",
-      borderRadius: "12px",
-      cursor: "pointer",
-      fontWeight: "600",
-      fontSize: "16px",
-    }}
-  >
-    🛁 Посмотреть интерьер
-  </button>
-)}
-
+<button
+  onClick={() => {
+    if (item.interiorImage) {
+      setSelectedInterior(item.interiorImage);
+    } else {
+      alert("Для этого товара пока нет фото интерьера");
+    }
+  }}
+  style={{
+    width: "100%",
+    marginTop: "15px",
+    padding: "15px",
+    background: "transparent",
+    color: "#d4b483",
+    border: "1px solid #d4b483",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontWeight: "600",
+    fontSize: "16px",
+  }}
+>
+  🛁 Посмотреть интерьер
+</button>
 
 
 <button
