@@ -57,7 +57,10 @@ const ProductSchema = new mongoose.Schema({
   image: String,
 
   // фото интерьера
-  interiorImage: String,
+  interiorImage:{
+    type: String,
+    default: "",
+  },
 
 
   // Все текстуры плитки
