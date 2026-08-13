@@ -7,7 +7,9 @@ const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-require("dotenv").config();
+require("dotenv").config({
+  path: "../.env"
+});
 
 const app = express();
 
@@ -44,9 +46,7 @@ const upload = multer({ storage });
 // =========================
 
 mongoose
-  .connect(
-    "mongodb://muhammedarupov1_db_user:Ara_2026@ac-lmekdoi-shard-00-00.9civ3fl.mongodb.net:27017,ac-lmekdoi-shard-00-01.9civ3fl.mongodb.net:27017,ac-lmekdoi-shard-00-02.9civ3fl.mongodb.net:27017/?ssl=true&replicaSet=atlas-19l7hm-shard-0&authSource=admin&appName=Cluster0"
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB подключена"))
   .catch((err) => console.log("Ошибка MongoDB:", err));
 
