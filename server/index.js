@@ -217,7 +217,36 @@ app.delete("/products/:id", async (req, res) => {
 // SERVER
 // =========================
 
+app.use((err, req, res, next) => {
+  console.error("🔥 SERVER ERROR:");
+  console.error("name:", err.name);
+  console.error("message:", err.message);
+  console.error("field:", err.field);
+  console.error("code:", err.code);
+
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({
+      message: err.message,
+      field: err.field,
+      code: err.code,
+    });
+  }
+
+  res.status(500).json({
+    message: err.message || "Ошибка сервера",
+  });
+});
+
+
+
+
+
 const PORT = process.env.PORT || 3000;
+
+
+
+
+
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Сервер запущен на порту ${PORT}`);
