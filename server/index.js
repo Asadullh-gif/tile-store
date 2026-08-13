@@ -1,13 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Product = require("./models/Product");
+const Product = require("./models/product");
 const cors = require("cors");
 const multer = require("multer");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-dotenv.config();
+require("dotenv").config();
 
 const app = express();
 
@@ -33,6 +33,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "tilestore/products",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    resource_type: "image"
   },
 });
 
@@ -55,6 +56,13 @@ mongoose
 
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
+
+    console.log("🔥 POST /products ПОЛУЧЕН");
+    console.log("Файл:", req.file);
+    console.log("Body:", req.body);
+
+
+
     const product = new Product({
       name: req.body.name,
       price: req.body.price,
@@ -67,9 +75,12 @@ app.post("/products", upload.single("image"), async (req, res) => {
 
       // Cloudinary URL
       image: req.file ? req.file.path : "",
+      interiorImage: req.files?.interiorImage?.[0]?.path || "",
     });
 
     await product.save();
+
+    console.log("🔥 Товар успешно добавлен:", product);
 
     res.json(product);
   } catch (err) {
@@ -101,6 +112,10 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
     // Если загрузили новую картинку
     if (req.file) {
       updateData.image = req.file.path;
+    }
+
+    if (req.files && req.files.interiorImages) {
+      updateData.interiorImage = req.files.interiorImage[0].path;
     }
 
     const product = await Product.findByIdAndUpdate(
