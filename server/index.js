@@ -41,6 +41,9 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+console.log("🔥 MULTER UPLOAD MODE: ANY");
+console.log("🔥 Multer version:", require("multer/package.json").version);
+
 
 const getFileByField = (files, fieldname) => {
   return files?.find((file) => file.fieldname === fieldname);
