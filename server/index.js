@@ -135,10 +135,11 @@ app.put(
         "image"
       );
 
-      const interiorImageFiles =
-  req.files?.filter(
-    (file) => file.fieldname === "interiorImages"
-  ) || [];
+      const interiorImages = [
+  getFileByField(req.files, "interiorImage1"),
+  getFileByField(req.files, "interiorImage2"),
+  getFileByField(req.files, "interiorImage3"),
+];
 
   if (interiorImageFiles.length > 0) {
   updateData.interiorImages = interiorImageFiles

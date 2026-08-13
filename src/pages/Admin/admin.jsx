@@ -18,7 +18,12 @@ function Admin() {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [interiorImageFiles, setInteriorImageFiles] = useState([]);
+  const [interiorImageFiles, setInteriorImageFiles] = useState([
+    null,
+    null,
+    null,
+  ]);
+  const [existingInteriorImages, setExistingInteriorImages] = useState([]);
 
  const navigate = useNavigate();
 
@@ -66,9 +71,10 @@ if (imageFile) {
   formData.append("image", imageFile);
 }
 
-
-interiorImageFiles.forEach((file) => {
-  formData.append("interiorImages", file);
+interiorImageFiles.forEach((file, index) => {
+  if (file) {
+    formData.append(`interiorImage${index + 1}`, file);
+  }
 });
 
       if (editingId) {
@@ -96,28 +102,38 @@ interiorImageFiles.forEach((file) => {
     }
   };
 
-  const editProduct = (item) => {
-    setEditingId(item._id);
-    setImageFile(null); // Сбросить выбранный файл изображения при редактировании
-    setInteriorImageFiles([]); // Сбросить выбранный файл внутреннего изображения при редактировании
+const editProduct = (item) => {
+  setEditingId(item._id);
 
-    setProduct({
-      name: item.name,
-      price: item.price,
-      image: item.image,
-      size: item.size,
-      material: item.material,
-      room: item.room,
-      type: item.type,
-      description: item.description,
-      featured: item.featured,
-    });
+  setImageFile(null);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  setInteriorImageFiles([
+    null,
+    null,
+    null,
+  ]);
+
+  setExistingInteriorImages(
+    item.interiorImages || []
+  );
+
+  setProduct({
+    name: item.name || "",
+    price: item.price || "",
+    image: item.image || "",
+    size: item.size || "",
+    material: item.material || "",
+    room: item.room || "Ванная",
+    type: item.type || "bathroom",
+    description: item.description || "",
+    featured: item.featured || false,
+  });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 
   const deleteProduct = async (id) => {
     if (!window.confirm("Удалить товар?")) return;
@@ -199,43 +215,103 @@ interiorImageFiles.forEach((file) => {
   }}
 />
 
+
+
 <label
   style={{
     color: "#d4b483",
     fontWeight: "600",
     fontSize: "18px",
+    marginTop: "10px",
   }}
 >
   Фото интерьера
 </label>
 
-
-<label
+<div
   style={{
-    color: "#d4b483",
-    fontWeight: "600",
-    fontSize: "18px",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "15px",
   }}
 >
-  Фото интерьера — максимум 3
-</label>
+  {interiorImageFiles.map((file, index) => (
+    <div
+      key={index}
+      style={{
+        background: "#1b1b1b",
+        border: "1px solid #333",
+        borderRadius: "15px",
+        padding: "15px",
+      }}
+    >
+      <p
+        style={{
+          color: "#d4b483",
+          fontWeight: "600",
+          marginBottom: "10px",
+        }}
+      >
+        Интерьер {index + 1}
+      </p>
 
-<input
-  type="file"
-  accept="image/*"
-  multiple
-  onChange={(e) => {
-    const files = Array.from(e.target.files);
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files[0];
 
-    if (files.length > 3) {
-      alert("Можно выбрать максимум 3 фотографии");
-      e.target.value = "";
-      return;
-    }
+          setInteriorImageFiles((prev) => {
+            const updated = [...prev];
+            updated[index] = file || null;
+            return updated;
+          });
+        }}
+      />
 
-    setInteriorImageFiles(files);
-  }}
-/>
+      {file && (
+        <div style={{ marginTop: "10px" }}>
+          <img
+            src={URL.createObjectURL(file)}
+            alt={`Интерьер ${index + 1}`}
+            style={{
+              width: "100%",
+              height: "140px",
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+              setInteriorImageFiles((prev) => {
+                const updated = [...prev];
+                updated[index] = null;
+                return updated;
+              });
+            }}
+            style={{
+              width: "100%",
+              marginTop: "8px",
+              padding: "8px",
+              background: "#d9534f",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          >
+            Удалить
+          </button>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
+
+
 
 {interiorImageFiles.length > 0 && (
   <div
