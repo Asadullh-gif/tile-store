@@ -56,15 +56,21 @@ mongoose
 
 app.post(
   "/products",
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "interiorImage", maxCount: 1 },
-  ]),
+  upload.any(),
   async (req, res) => {
     try {
       console.log("🔥 POST /products ПОЛУЧЕН");
-      console.log("Файлы:", req.files);
-      console.log("Body:", req.body);
+      console.log("BODY:", req.body);
+      console.log("FILES:", req.files);
+
+      const imageFile = getFileByField(req.files, "image");
+      const interiorImageFile = getFileByField(
+        req.files,
+        "interiorImage"
+      );
+
+      console.log("🖼 image:", imageFile?.fieldname);
+      console.log("🏠 interiorImage:", interiorImageFile?.fieldname);
 
       const product = new Product({
         name: req.body.name,
@@ -76,19 +82,19 @@ app.post(
         description: req.body.description,
         featured: req.body.featured === "true",
 
-        image: req.files?.image?.[0]?.path || "",
+        image: imageFile?.path || "",
 
-        interiorImage:
-          req.files?.interiorImage?.[0]?.path || "",
+        interiorImage: interiorImageFile?.path || "",
       });
 
       await product.save();
 
-      console.log("🔥 Товар успешно добавлен:", product);
+      console.log("✅ Товар успешно добавлен:", product);
 
       res.json(product);
+
     } catch (err) {
-      console.log("❌ Ошибка:", err);
+      console.error("❌ Ошибка POST:", err);
 
       res.status(500).json({
         message: err.message,
@@ -103,16 +109,23 @@ app.post(
 
 app.put(
   "/products/:id",
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "interiorImage", maxCount: 1 },
-  ]),
+  upload.any(),
   async (req, res) => {
     try {
       console.log("🔥 PUT /products/:id");
       console.log("ID:", req.params.id);
       console.log("BODY:", req.body);
       console.log("FILES:", req.files);
+
+      const imageFile = getFileByField(
+        req.files,
+        "image"
+      );
+
+      const interiorImageFile = getFileByField(
+        req.files,
+        "interiorImage"
+      );
 
       const updateData = {
         name: req.body.name,
@@ -125,41 +138,34 @@ app.put(
         featured: req.body.featured === "true",
       };
 
-      // =========================
-      // НОВАЯ ГЛАВНАЯ ФОТОГРАФИЯ
-      // =========================
-
-      if (req.files?.image?.[0]) {
-        updateData.image = req.files.image[0].path;
+      if (imageFile) {
+        updateData.image = imageFile.path;
 
         console.log(
           "🖼 Новая image:",
-          updateData.image
+          imageFile.path
         );
       }
 
-      // =========================
-      // НОВАЯ ФОТОГРАФИЯ ИНТЕРЬЕРА
-      // =========================
-
-      if (req.files?.interiorImage?.[0]) {
+      if (interiorImageFile) {
         updateData.interiorImage =
-          req.files.interiorImage[0].path;
+          interiorImageFile.path;
 
         console.log(
           "🏠 Новая interiorImage:",
-          updateData.interiorImage
+          interiorImageFile.path
         );
       }
 
-      const product = await Product.findByIdAndUpdate(
-        req.params.id,
-        updateData,
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+      const product =
+        await Product.findByIdAndUpdate(
+          req.params.id,
+          updateData,
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
 
       if (!product) {
         return res.status(404).json({
@@ -167,11 +173,15 @@ app.put(
         });
       }
 
-      console.log("✅ Товар после изменения:", product);
+      console.log(
+        "✅ Товар после изменения:",
+        product
+      );
 
       res.json(product);
+
     } catch (err) {
-      console.log("❌ Ошибка PUT:", err);
+      console.error("❌ Ошибка PUT:", err);
 
       res.status(500).json({
         message: err.message,
