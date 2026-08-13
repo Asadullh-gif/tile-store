@@ -18,7 +18,7 @@ function Admin() {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [interiorImageFile, setInteriorImageFile] = useState(null);
+  const [interiorImageFiles, setInteriorImageFiles] = useState([]);
 
  const navigate = useNavigate();
 
@@ -67,9 +67,9 @@ if (imageFile) {
 }
 
 
-if (interiorImageFile) {
-  formData.append("interiorImage", interiorImageFile);
-}
+interiorImageFiles.forEach((file) => {
+  formData.append("interiorImages", file);
+});
 
       if (editingId) {
         await fetch(`https://my-backend-j4fz.onrender.com/products/${editingId}`, {
@@ -99,7 +99,7 @@ if (interiorImageFile) {
   const editProduct = (item) => {
     setEditingId(item._id);
     setImageFile(null); // Сбросить выбранный файл изображения при редактировании
-    setInteriorImageFile(null); // Сбросить выбранный файл внутреннего изображения при редактировании
+    setInteriorImageFiles([]); // Сбросить выбранный файл внутреннего изображения при редактировании
 
     setProduct({
       name: item.name,
@@ -209,13 +209,70 @@ if (interiorImageFile) {
   Фото интерьера
 </label>
 
+
+<label
+  style={{
+    color: "#d4b483",
+    fontWeight: "600",
+    fontSize: "18px",
+  }}
+>
+  Фото интерьера — максимум 3
+</label>
+
 <input
   type="file"
   accept="image/*"
+  multiple
   onChange={(e) => {
-    setInteriorImageFile(e.target.files[0]);
+    const files = Array.from(e.target.files);
+
+    if (files.length > 3) {
+      alert("Можно выбрать максимум 3 фотографии");
+      e.target.value = "";
+      return;
+    }
+
+    setInteriorImageFiles(files);
   }}
 />
+
+{interiorImageFiles.length > 0 && (
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: "10px",
+    }}
+  >
+    {interiorImageFiles.map((file, index) => (
+      <div key={index}>
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`Интерьер ${index + 1}`}
+          style={{
+            width: "100%",
+            height: "120px",
+            objectFit: "cover",
+            borderRadius: "10px",
+          }}
+        />
+
+        <p
+          style={{
+            textAlign: "center",
+            color: "#aaa",
+            fontSize: "13px",
+          }}
+        >
+          Интерьер {index + 1}
+        </p>
+      </div>
+    ))}
+  </div>
+)}
+
+
 
         <input
           name="size"

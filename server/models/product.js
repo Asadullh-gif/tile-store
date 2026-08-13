@@ -56,11 +56,17 @@ const ProductSchema = new mongoose.Schema({
   // Картинка карточки товара
   image: String,
 
-  // фото интерьера
-  interiorImage:{
-    type: String,
-    default: "",
+ // 3 фото интерьера
+interiorImages: {
+  type: [String],
+  default: [],
+  validate: {
+    validator: function (images) {
+      return images.length <= 3;
+    },
+    message: "Можно загрузить максимум 3 фото интерьера",
   },
+},
 
 
   // Все текстуры плитки

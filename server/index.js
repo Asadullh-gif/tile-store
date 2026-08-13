@@ -72,10 +72,13 @@ app.post(
       console.log("FILES:", req.files);
 
       const imageFile = getFileByField(req.files, "image");
-      const interiorImageFile = getFileByField(
-        req.files,
-        "interiorImage"
-      );
+
+      
+
+      const interiorImageFiles =
+  req.files?.filter(
+    (file) => file.fieldname === "interiorImages"
+  ) || [];
 
       console.log("🖼 image:", imageFile?.fieldname);
       console.log("🏠 interiorImage:", interiorImageFile?.fieldname);
@@ -92,7 +95,9 @@ app.post(
 
         image: imageFile?.path || "",
 
-        interiorImage: interiorImageFile?.path || "",
+         interiorImages: interiorImageFiles
+    .slice(0, 3)
+    .map(file => file.path),
       });
 
       await product.save();
@@ -130,10 +135,16 @@ app.put(
         "image"
       );
 
-      const interiorImageFile = getFileByField(
-        req.files,
-        "interiorImage"
-      );
+      const interiorImageFiles =
+  req.files?.filter(
+    (file) => file.fieldname === "interiorImages"
+  ) || [];
+
+  if (interiorImageFiles.length > 0) {
+  updateData.interiorImages = interiorImageFiles
+    .slice(0, 3)
+    .map(file => file.path);
+}
 
       const updateData = {
         name: req.body.name,
@@ -155,15 +166,17 @@ app.put(
         );
       }
 
-      if (interiorImageFile) {
-        updateData.interiorImage =
-          interiorImageFile.path;
+    if (interiorImageFiles.length > 0) {
+  updateData.interiorImages =
+    interiorImageFiles
+      .slice(0, 3)
+      .map((file) => file.path);
 
-        console.log(
-          "🏠 Новая interiorImage:",
-          interiorImageFile.path
-        );
-      }
+  console.log(
+    "🏠 Новые интерьеры:",
+    updateData.interiorImages
+  );
+}
 
       const product =
         await Product.findByIdAndUpdate(
