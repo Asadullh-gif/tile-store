@@ -235,129 +235,97 @@ const editProduct = (item) => {
     gap: "15px",
   }}
 >
-  {[0, 1, 2].map((index) => {
-    const file = interiorImageFiles[index];
-    const oldImage = existingInteriorImages[index];
+  
+{[0, 1, 2].map((index) => {
+  const file = interiorImageFiles[index];
+  const oldImage = existingInteriorImages[index];
 
-    return (
-      <div
-        key={index}
+  return (
+    <div
+      key={index}
+      style={{
+        background: "#1b1b1b",
+        border: "1px solid #333",
+        borderRadius: "15px",
+        padding: "15px",
+      }}
+    >
+      <p
         style={{
-          background: "#1b1b1b",
-          border: "1px solid #333",
-          borderRadius: "15px",
-          padding: "15px",
+          color: "#d4b483",
+          fontWeight: "600",
+          marginBottom: "10px",
         }}
       >
-        <p
+        Интерьер {index + 1}
+      </p>
+
+      {(file || oldImage) && (
+        <img
+          src={file ? URL.createObjectURL(file) : oldImage}
+          alt={`Интерьер ${index + 1}`}
           style={{
-            color: "#d4b483",
-            fontWeight: "600",
+            width: "100%",
+            height: "160px",
+            objectFit: "cover",
+            borderRadius: "10px",
+            marginBottom: "10px",
           }}
-        >
-          Интерьер {index + 1}
-        </p>
+        />
+      )}
 
-        {(file || oldImage) && (
-          <img
-            src={file ? URL.createObjectURL(file) : oldImage}
-            alt={`Интерьер ${index + 1}`}
-            style={{
-              width: "100%",
-              height: "160px",
-              objectFit: "cover",
-              borderRadius: "10px",
-              marginBottom: "10px",
-            }}
-          />
-        )}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0] || null;
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => {
-            const selectedFile = e.target.files[0];
+          setInteriorImageFiles((prev) => {
+            const updated = [...prev];
+            updated[index] = selectedFile;
+            return updated;
+          });
+        }}
+      />
 
+      {(file || oldImage) && (
+        <button
+          type="button"
+          onClick={() => {
             setInteriorImageFiles((prev) => {
               const updated = [...prev];
-              updated[index] = selectedFile || null;
+              updated[index] = null;
+              return updated;
+            });
+
+            setExistingInteriorImages((prev) => {
+              const updated = [...prev];
+              updated[index] = null;
               return updated;
             });
           }}
-        />
+          style={{
+            width: "100%",
+            marginTop: "10px",
+            padding: "9px",
+            background: "#d9534f",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          🗑 Удалить
+        </button>
+      )}
+    </div>
+  );
+})}
 
-        {(file || oldImage) && (
-          <button
-            type="button"
-            onClick={() => {
-              setInteriorImageFiles((prev) => {
-                const updated = [...prev];
-                updated[index] = null;
-                return updated;
-              });
-
-              setExistingInteriorImages((prev) => {
-                const updated = [...prev];
-                updated[index] = null;
-                return updated;
-              });
-            }}
-            style={{
-              width: "100%",
-              marginTop: "10px",
-              padding: "9px",
-              background: "#d9534f",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-          >
-            🗑 Удалить
-          </button>
-        )}
-      </div>
-    );
-  })}
 </div>
 
 
 
-
-{interiorImageFiles.length > 0 && (
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: "10px",
-    }}
-  >
-    {interiorImageFiles.map((file, index) => (
-      <div key={index}>
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`Интерьер ${index + 1}`}
-          style={{
-            width: "100%",
-            height: "120px",
-            objectFit: "cover",
-            borderRadius: "10px",
-          }}
-        />
-
-        <p
-          style={{
-            textAlign: "center",
-            color: "#aaa",
-            fontSize: "13px",
-          }}
-        >
-          Интерьер {index + 1}
-        </p>
-      </div>
-    ))}
-  </div>
-)}
 
 
 
