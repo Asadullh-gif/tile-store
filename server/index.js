@@ -212,6 +212,35 @@ app.put(
   }
 );
 
+
+
+// =========================
+// ПОЛУЧИТЬ ВСЕ ТОВАРЫ
+// =========================
+
+app.get("/products", async (req, res) => {
+  try {
+    console.log("🔥 GET /products");
+
+    const products = await Product.find().sort({
+      createdAt: -1,
+    });
+
+    console.log(`📦 Найдено товаров: ${products.length}`);
+
+    res.json(products);
+
+  } catch (err) {
+    console.error("❌ Ошибка GET /products:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
 // =========================
 // УДАЛИТЬ ТОВАР
 // =========================
