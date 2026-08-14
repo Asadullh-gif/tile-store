@@ -71,17 +71,22 @@ app.post(
       console.log("BODY:", req.body);
       console.log("FILES:", req.files);
 
+      // Главное фото товара
       const imageFile = getFileByField(req.files, "image");
 
-      
+      // 3 фотографии интерьера
+      const interiorImages = (req.files || [])
+        .filter((file) =>
+          ["interiorImage1", "interiorImage2", "interiorImage3"]
+            .includes(file.fieldname)
+        )
+        .sort((a, b) =>
+          a.fieldname.localeCompare(b.fieldname)
+        )
+        .map((file) => file.path);
 
-      const interiorImageFiles =
-  req.files?.filter(
-    (file) => file.fieldname === "interiorImages"
-  ) || [];
-
-      console.log("🖼 image:", imageFile?.fieldname);
-      console.log("🏠 interiorImage:", interiorImageFile?.fieldname);
+      console.log("🖼 image:", imageFile?.path);
+      console.log("🏠 interiorImages:", interiorImages);
 
       const product = new Product({
         name: req.body.name,
@@ -95,9 +100,7 @@ app.post(
 
         image: imageFile?.path || "",
 
-         interiorImages: interiorImageFiles
-    .slice(0, 3)
-    .map(file => file.path),
+        interiorImages: interiorImages,
       });
 
       await product.save();
@@ -135,17 +138,15 @@ app.put(
         "image"
       );
 
-      const interiorImages = [
-  getFileByField(req.files, "interiorImage1"),
-  getFileByField(req.files, "interiorImage2"),
-  getFileByField(req.files, "interiorImage3"),
-];
-
-  if (interiorImageFiles.length > 0) {
-  updateData.interiorImages = interiorImageFiles
-    .slice(0, 3)
-    .map(file => file.path);
-}
+      const newInteriorImages = (req.files || [])
+        .filter((file) =>
+          ["interiorImage1", "interiorImage2", "interiorImage3"]
+            .includes(file.fieldname)
+        )
+        .sort((a, b) =>
+          a.fieldname.localeCompare(b.fieldname)
+        )
+        .map((file) => file.path);
 
       const updateData = {
         name: req.body.name,
@@ -158,6 +159,7 @@ app.put(
         featured: req.body.featured === "true",
       };
 
+      // Новое главное фото
       if (imageFile) {
         updateData.image = imageFile.path;
 
@@ -167,17 +169,15 @@ app.put(
         );
       }
 
-    if (interiorImageFiles.length > 0) {
-  updateData.interiorImages =
-    interiorImageFiles
-      .slice(0, 3)
-      .map((file) => file.path);
+      // Новые интерьеры
+      if (newInteriorImages.length > 0) {
+        updateData.interiorImages = newInteriorImages;
 
-  console.log(
-    "🏠 Новые интерьеры:",
-    updateData.interiorImages
-  );
-}
+        console.log(
+          "🏠 Новые interiorImages:",
+          newInteriorImages
+        );
+      }
 
       const product =
         await Product.findByIdAndUpdate(
@@ -211,21 +211,6 @@ app.put(
     }
   }
 );
-// =========================
-// ПОЛУЧИТЬ ТОВАРЫ
-// =========================
-
-app.get("/products", async (req, res) => {
-  try {
-    const products = await Product.find();
-
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({
-      message: err.message,
-    });
-  }
-});
 
 // =========================
 // УДАЛИТЬ ТОВАР
