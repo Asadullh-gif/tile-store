@@ -595,45 +595,7 @@ function Admin() {
           style={inputStyle}
         />
 
-        {/* =========================
-            РАЗМЕРЫ
-        ========================= */}
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(3, 1fr)",
-            gap: "12px",
-          }}
-        >
-          <input
-            name="width"
-            type="number"
-            placeholder="Ширина"
-            value={product.width}
-            onChange={handleChange}
-            style={inputStyle}
-          />
-
-          <input
-            name="height"
-            type="number"
-            placeholder="Высота"
-            value={product.height}
-            onChange={handleChange}
-            style={inputStyle}
-          />
-
-          <input
-            name="thickness"
-            type="number"
-            placeholder="Толщина"
-            value={product.thickness}
-            onChange={handleChange}
-            style={inputStyle}
-          />
-        </div>
+        
 
         {/* =========================
             МАТЕРИАЛ
@@ -1228,6 +1190,7 @@ function Admin() {
 
             <h2
               style={{
+                color: "white",
                 marginTop:
                   "20px",
                 marginBottom:
