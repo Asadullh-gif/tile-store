@@ -303,11 +303,16 @@ if (sort === "name") {
               >
                 {item.name}
                 </h2>
+                
+                <p>{item.brand}</p>
+
                 <p>
                   {item.size}
                 </p>
 
               <p>{item.room}</p>
+
+              
 
               <p>{item.material}</p>
 

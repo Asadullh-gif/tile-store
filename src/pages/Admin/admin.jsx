@@ -609,29 +609,9 @@ function Admin() {
           style={inputStyle}
         />
 
-        {/* =========================
-            ЦВЕТ
-        ========================= */}
+      
 
-        <input
-          name="color"
-          placeholder="Цвет"
-          value={product.color}
-          onChange={handleChange}
-          style={inputStyle}
-        />
-
-        {/* =========================
-            ФАКТУРА
-        ========================= */}
-
-        <input
-          name="finish"
-          placeholder="Поверхность: матовая / глянцевая"
-          value={product.finish}
-          onChange={handleChange}
-          style={inputStyle}
-        />
+        
 
         {/* =========================
             КОМНАТА
