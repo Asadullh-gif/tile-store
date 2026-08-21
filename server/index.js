@@ -16,6 +16,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+function createSlug(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/ё/g, "е")
+    .replace(/[^a-zа-я0-9\s-]/gi, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 // =========================
 // CLOUDINARY
 // =========================
@@ -90,6 +102,7 @@ app.post(
 
       const product = new Product({
         name: req.body.name,
+        slug: createSlug(req.body.name),
         price: req.body.price,
         size: req.body.size,
         material: req.body.material,
@@ -150,6 +163,7 @@ app.put(
 
       const updateData = {
         name: req.body.name,
+        slug: createSlug(req.body.name),
         price: req.body.price,
         size: req.body.size,
         material: req.body.material,
@@ -240,6 +254,27 @@ app.get("/products", async (req, res) => {
 });
 
 
+app.get("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Товар не найден",
+      });
+    }
+
+    res.json(product);
+  } catch (err) {
+    console.error("Ошибка получения товара:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
 
 // =========================
 // УДАЛИТЬ ТОВАР
@@ -294,6 +329,63 @@ const PORT = process.env.PORT || 3000;
 
 
 console.log("🚀 SERVER VERSION 2 - upload.any()");
+
+
+
+
+app.get("/admin/create-slugs", async (req, res) => {
+  try {
+    const products = await Product.find({
+      $or: [
+        { slug: { $exists: false } },
+        { slug: "" },
+        { slug: null },
+      ],
+    });
+
+    let updated = 0;
+
+    for (const product of products) {
+      let slug = createSlug(product.name);
+
+      // Если такой slug уже существует
+      const existing = await Product.findOne({
+        slug,
+        _id: { $ne: product._id },
+      });
+
+      if (existing) {
+        slug = `${slug}-${product._id
+          .toString()
+          .slice(-6)}`;
+      }
+
+      product.slug = slug;
+
+      await product.save();
+
+      updated++;
+
+      console.log(
+        `✅ ${product.name} → ${product.slug}`
+      );
+    }
+
+    res.json({
+      message: "Slug успешно созданы",
+      updated,
+    });
+  } catch (err) {
+    console.error(
+      "❌ Ошибка создания slug:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
 
 
 

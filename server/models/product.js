@@ -68,6 +68,12 @@ interiorImages: {
   },
 },
 
+slug: {
+  type: String,
+  unique: true,
+  index: true,
+},
+
 
   // Все текстуры плитки
   textures: {
@@ -96,5 +102,6 @@ interiorImages: {
     default: Date.now,
   },
 });
+
 
 module.exports = mongoose.model("Product", ProductSchema);

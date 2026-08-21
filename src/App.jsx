@@ -13,6 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 import Collections from "./pages/Collections/collections.jsx";
 import Constructor from "./pages/Constructor/Constructor.jsx";
 import Footer from "./Components/UI/Footer";
+import ProductPage from "./pages/ProductPage/ProductPage.jsx";
 
 
 
@@ -45,6 +46,7 @@ function App() {
       <Route path="/catalog" element={<Catalog cart={cart} setCart={setCart} />} />
       <Route path="/collections" element={<Collections />} />
       <Route path="/constructor" element={<Constructor />}/>
+      <Route path="/product/:id" element={<ProductPage cart={cart} setCart={setCart} />} />
     </Routes>
   );
 }

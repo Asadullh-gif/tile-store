@@ -464,6 +464,27 @@ function Catalog({ cart, setCart }) {
                 🛁 Посмотреть интерьер
               </button>
 
+
+
+              <Link
+  to={`/product/${item._id}`}
+  style={{
+    display: "block",
+    width: "100%",
+    marginTop: "15px",
+    padding: "15px",
+    background: "#d4b483",
+    color: "#111",
+    borderRadius: "12px",
+    textAlign: "center",
+    textDecoration: "none",
+    fontWeight: "700",
+    boxSizing: "border-box",
+  }}
+>
+  Подробнее о товаре →
+</Link>
+
               {/* =========================
                   КОРЗИНА
               ========================= */}
