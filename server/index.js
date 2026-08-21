@@ -389,6 +389,29 @@ app.get("/admin/create-slugs", async (req, res) => {
 
 
 
+app.get("/admin/check-slugs", async (req, res) => {
+  try {
+    const products = await Product.find(
+      {},
+      {
+        _id: 1,
+        name: 1,
+        slug: 1,
+      }
+    );
+
+    res.json(products);
+  } catch (err) {
+    console.error("Ошибка проверки slug:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Сервер запущен на порту ${PORT}`);
 });
