@@ -46,7 +46,7 @@ function App() {
       <Route path="/catalog" element={<Catalog cart={cart} setCart={setCart} />} />
       <Route path="/collections" element={<Collections />} />
       <Route path="/constructor" element={<Constructor />}/>
-      <Route path="/product/:id" element={<ProductPage cart={cart} setCart={setCart} />} />
+      <Route path="/product/:slug" element={<ProductPage cart={cart} setCart={setCart} />} />
     </Routes>
   );
 }

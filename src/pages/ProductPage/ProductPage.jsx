@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 const API_URL = "https://my-backend-j4fz.onrender.com";
 
 function ProductPage({ cart, setCart }) {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ function ProductPage({ cart, setCart }) {
       try {
         setLoading(true);
 
-        const res = await fetch(`${API_URL}/products/${id}`);
+        const res = await fetch(`${API_URL}/products/slug/${slug}`);
 
         if (!res.ok) {
           throw new Error("Товар не найден");
@@ -34,7 +34,7 @@ function ProductPage({ cart, setCart }) {
     };
 
     loadProduct();
-  }, [id]);
+  }, [slug]);
 
   const addToCart = () => {
     if (!product) return;
