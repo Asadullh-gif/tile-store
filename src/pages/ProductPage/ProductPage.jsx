@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const API_URL = "https://my-backend-j4fz.onrender.com";
+const SITE_URL = "https://tile-store-b7wm.vercel.app";
 
 function ProductPage({ cart, setCart }) {
   const { slug } = useParams();
@@ -17,7 +19,9 @@ function ProductPage({ cart, setCart }) {
       try {
         setLoading(true);
 
-        const res = await fetch(`${API_URL}/products/slug/${slug}`);
+        const res = await fetch(
+          `${API_URL}/products/slug/${slug}`
+        );
 
         if (!res.ok) {
           throw new Error("Товар не найден");
@@ -28,6 +32,7 @@ function ProductPage({ cart, setCart }) {
         setProduct(data);
       } catch (err) {
         console.error("Ошибка загрузки товара:", err);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
@@ -95,6 +100,88 @@ function ProductPage({ cart, setCart }) {
     );
   }
 
+  // =========================
+  // SEO DATA
+  // =========================
+
+  const productUrl = `${SITE_URL}/product/${product.slug}`;
+
+  const productSize = product.size || "плитка";
+
+  const productMaterial =
+    product.material || "керамическая плитка";
+
+  const productDescription =
+    product.description ||
+    `${product.name} — ${productMaterial}, размер ${productSize}. Цена ${product.price} ₸. Купить в TileStore.`;
+
+  const productTitle =
+    `${product.name} — ${productSize} | TileStore`;
+
+  const productImages = [
+    product.image,
+    ...(Array.isArray(product.interiorImages)
+      ? product.interiorImages
+      : []),
+  ].filter(Boolean);
+
+  const availability =
+    product.stock > 0
+      ? "https://schema.org/InStock"
+      : "https://schema.org/OutOfStock";
+
+  // =========================
+  // PRODUCT JSON-LD
+  // =========================
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    name: product.name,
+
+    image: productImages,
+
+    description: productDescription,
+
+    sku: product.slug,
+
+    ...(product.brand
+      ? {
+          brand: {
+            "@type": "Brand",
+            name: product.brand,
+          },
+        }
+      : {
+          brand: {
+            "@type": "Brand",
+            name: "TileStore",
+          },
+        }),
+
+    ...(product.color
+      ? {
+          color: product.color,
+        }
+      : {}),
+
+    offers: {
+      "@type": "Offer",
+
+      url: productUrl,
+
+      priceCurrency: "KZT",
+
+      price: Number(product.price),
+
+      availability: availability,
+
+      itemCondition:
+        "https://schema.org/NewCondition",
+    },
+  };
+
   const interiorImages =
     Array.isArray(product.interiorImages)
       ? product.interiorImages
@@ -103,390 +190,467 @@ function ProductPage({ cart, setCart }) {
       : [];
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#111",
-        color: "white",
-        padding: "40px",
-      }}
-    >
-      {/* HEADER */}
+    <>
+      {/* =========================
+          SEO
+      ========================= */}
 
-      <div
-        style={{
-          maxWidth: "1300px",
-          margin: "0 auto 40px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Link
-          to="/catalog"
-          style={{
-            background: "#d4b483",
-            color: "#111",
-            padding: "13px 22px",
-            borderRadius: "50px",
-            textDecoration: "none",
-            fontWeight: "700",
-          }}
-        >
-          ← Каталог
-        </Link>
+      <Helmet>
+        <title>{productTitle}</title>
 
-        <Link
-          to="/cart"
-          style={{
-            color: "#d4b483",
-            textDecoration: "none",
-            fontWeight: "600",
-            fontSize: "17px",
-          }}
-        >
-          🛒 Корзина
-        </Link>
-      </div>
+        <meta
+          name="description"
+          content={productDescription}
+        />
 
-      {/* PRODUCT */}
+        <link
+          rel="canonical"
+          href={productUrl}
+        />
 
-      <div
-        style={{
-          maxWidth: "1300px",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1.2fr 1fr",
-          gap: "50px",
-          alignItems: "start",
-        }}
-      >
-        {/* LEFT */}
+        {/* Open Graph */}
 
-        <div>
-          <img
-            src={product.image}
-            alt={product.name}
-            onClick={() => setSelectedImage(product.image)}
-            style={{
-              width: "100%",
-              maxHeight: "650px",
-              objectFit: "cover",
-              borderRadius: "20px",
-              cursor: "zoom-in",
-              boxShadow: "0 20px 60px rgba(0,0,0,.4)",
-            }}
+        <meta
+          property="og:title"
+          content={productTitle}
+        />
+
+        <meta
+          property="og:description"
+          content={productDescription}
+        />
+
+        <meta
+          property="og:url"
+          content={productUrl}
+        />
+
+        <meta
+          property="og:type"
+          content="product"
+        />
+
+        {product.image && (
+          <meta
+            property="og:image"
+            content={product.image}
           />
+        )}
 
-          {/* INTERIOR */}
+        <meta
+          property="og:site_name"
+          content="TileStore"
+        />
 
-          {interiorImages.length > 0 && (
-            <div style={{ marginTop: "35px" }}>
-              <h2
-                style={{
-                  color: "#d4b483",
-                  marginBottom: "20px",
-                }}
-              >
-                Интерьеры
-              </h2>
+        {/* Product JSON-LD */}
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns:
-                    "repeat(3, 1fr)",
-                  gap: "15px",
-                }}
-              >
-                {interiorImages.map(
-                  (image, index) => (
-                    <img
-                      key={image + index}
-                      src={image}
-                      alt={`Интерьер ${index + 1}`}
-                      onClick={() =>
-                        setSelectedInterior(image)
-                      }
-                      style={{
-                        width: "100%",
-                        height: "180px",
-                        objectFit: "cover",
-                        borderRadius: "15px",
-                        cursor: "zoom-in",
-                      }}
-                    />
-                  )
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        <script type="application/ld+json">
+          {JSON.stringify(productSchema)}
+        </script>
+      </Helmet>
 
-        {/* RIGHT */}
+      {/* =========================
+          PAGE
+      ========================= */}
+
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "#111",
+          color: "white",
+          padding: "40px",
+        }}
+      >
+        {/* HEADER */}
 
         <div
           style={{
-            background: "#1b1b1b",
-            padding: "35px",
-            borderRadius: "25px",
-            position: "sticky",
-            top: "30px",
+            maxWidth: "1300px",
+            margin: "0 auto 40px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <p
+          <Link
+            to="/catalog"
             style={{
-              color: "#999",
-              marginBottom: "10px",
-            }}
-          >
-            {product.brand || "TileStore"}
-          </p>
-
-          <h1
-            style={{
-              fontSize: "42px",
-              margin: "0 0 20px",
-            }}
-          >
-            {product.name}
-          </h1>
-
-          <h2
-            style={{
-              color: "#d4b483",
-              fontSize: "32px",
-              marginBottom: "30px",
-            }}
-          >
-            {product.price} ₸
-          </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(2, 1fr)",
-              gap: "15px",
-              marginBottom: "30px",
-            }}
-          >
-            <div
-              style={{
-                background: "#111",
-                padding: "18px",
-                borderRadius: "12px",
-              }}
-            >
-              <span style={{ color: "#888" }}>
-                Размер
-              </span>
-
-              <br />
-
-              <strong>{product.size || "—"}</strong>
-            </div>
-
-            <div
-              style={{
-                background: "#111",
-                padding: "18px",
-                borderRadius: "12px",
-              }}
-            >
-              <span style={{ color: "#888" }}>
-                Материал
-              </span>
-
-              <br />
-
-              <strong>
-                {product.material || "—"}
-              </strong>
-            </div>
-
-            <div
-              style={{
-                background: "#111",
-                padding: "18px",
-                borderRadius: "12px",
-              }}
-            >
-              <span style={{ color: "#888" }}>
-                Помещение
-              </span>
-
-              <br />
-
-              <strong>
-                {product.room || "—"}
-              </strong>
-            </div>
-
-            <div
-              style={{
-                background: "#111",
-                padding: "18px",
-                borderRadius: "12px",
-              }}
-            >
-              <span style={{ color: "#888" }}>
-                Категория
-              </span>
-
-              <br />
-
-              <strong>
-                {product.category || "—"}
-              </strong>
-            </div>
-          </div>
-
-          {product.description && (
-            <div style={{ marginBottom: "30px" }}>
-              <h3>Описание</h3>
-
-              <p
-                style={{
-                  color: "#aaa",
-                  lineHeight: "1.7",
-                  fontSize: "16px",
-                }}
-              >
-                {product.description}
-              </p>
-            </div>
-          )}
-
-          <button
-            onClick={addToCart}
-            style={{
-              width: "100%",
-              padding: "18px",
               background: "#d4b483",
               color: "#111",
-              border: "none",
-              borderRadius: "14px",
-              cursor: "pointer",
-              fontSize: "18px",
+              padding: "13px 22px",
+              borderRadius: "50px",
+              textDecoration: "none",
               fontWeight: "700",
             }}
           >
-            🛒 Добавить в корзину
-          </button>
+            ← Каталог
+          </Link>
+
+          <Link
+            to="/cart"
+            style={{
+              color: "#d4b483",
+              textDecoration: "none",
+              fontWeight: "600",
+              fontSize: "17px",
+            }}
+          >
+            🛒 Корзина
+          </Link>
         </div>
+
+        {/* PRODUCT */}
+
+        <div
+          style={{
+            maxWidth: "1300px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "1.2fr 1fr",
+            gap: "50px",
+            alignItems: "start",
+          }}
+        >
+          {/* LEFT */}
+
+          <div>
+            <img
+              src={product.image}
+              alt={`${product.name} ${product.size || ""}`}
+              onClick={() =>
+                setSelectedImage(product.image)
+              }
+              style={{
+                width: "100%",
+                maxHeight: "650px",
+                objectFit: "cover",
+                borderRadius: "20px",
+                cursor: "zoom-in",
+                boxShadow:
+                  "0 20px 60px rgba(0,0,0,.4)",
+              }}
+            />
+
+            {/* INTERIOR */}
+
+            {interiorImages.length > 0 && (
+              <div style={{ marginTop: "35px" }}>
+                <h2
+                  style={{
+                    color: "#d4b483",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Интерьеры
+                </h2>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(3, 1fr)",
+                    gap: "15px",
+                  }}
+                >
+                  {interiorImages.map(
+                    (image, index) => (
+                      <img
+                        key={image + index}
+                        src={image}
+                        alt={`${product.name} — интерьер ${
+                          index + 1
+                        }`}
+                        onClick={() =>
+                          setSelectedInterior(image)
+                        }
+                        style={{
+                          width: "100%",
+                          height: "180px",
+                          objectFit: "cover",
+                          borderRadius: "15px",
+                          cursor: "zoom-in",
+                        }}
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT */}
+
+          <div
+            style={{
+              background: "#1b1b1b",
+              padding: "35px",
+              borderRadius: "25px",
+              position: "sticky",
+              top: "30px",
+            }}
+          >
+            <p
+              style={{
+                color: "#999",
+                marginBottom: "10px",
+              }}
+            >
+              {product.brand || "TileStore"}
+            </p>
+
+            <h1
+              style={{
+                fontSize: "42px",
+                margin: "0 0 20px",
+              }}
+            >
+              {product.name}
+            </h1>
+
+            <h2
+              style={{
+                color: "#d4b483",
+                fontSize: "32px",
+                marginBottom: "30px",
+              }}
+            >
+              {product.price} ₸
+            </h2>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(2, 1fr)",
+                gap: "15px",
+                marginBottom: "30px",
+              }}
+            >
+              <div
+                style={{
+                  background: "#111",
+                  padding: "18px",
+                  borderRadius: "12px",
+                }}
+              >
+                <span style={{ color: "#888" }}>
+                  Размер
+                </span>
+
+                <br />
+
+                <strong>
+                  {product.size || "—"}
+                </strong>
+              </div>
+
+              <div
+                style={{
+                  background: "#111",
+                  padding: "18px",
+                  borderRadius: "12px",
+                }}
+              >
+                <span style={{ color: "#888" }}>
+                  Материал
+                </span>
+
+                <br />
+
+                <strong>
+                  {product.material || "—"}
+                </strong>
+              </div>
+
+              <div
+                style={{
+                  background: "#111",
+                  padding: "18px",
+                  borderRadius: "12px",
+                }}
+              >
+                <span style={{ color: "#888" }}>
+                  Помещение
+                </span>
+
+                <br />
+
+                <strong>
+                  {product.room || "—"}
+                </strong>
+              </div>
+
+              <div
+                style={{
+                  background: "#111",
+                  padding: "18px",
+                  borderRadius: "12px",
+                }}
+              >
+                <span style={{ color: "#888" }}>
+                  Категория
+                </span>
+
+                <br />
+
+                <strong>
+                  {product.category || "—"}
+                </strong>
+              </div>
+            </div>
+
+            {product.description && (
+              <div
+                style={{
+                  marginBottom: "30px",
+                }}
+              >
+                <h3>Описание</h3>
+
+                <p
+                  style={{
+                    color: "#aaa",
+                    lineHeight: "1.7",
+                    fontSize: "16px",
+                  }}
+                >
+                  {product.description}
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={addToCart}
+              style={{
+                width: "100%",
+                padding: "18px",
+                background: "#d4b483",
+                color: "#111",
+                border: "none",
+                borderRadius: "14px",
+                cursor: "pointer",
+                fontSize: "18px",
+                fontWeight: "700",
+              }}
+            >
+              🛒 Добавить в корзину
+            </button>
+          </div>
+        </div>
+
+        {/* MAIN IMAGE MODAL */}
+
+        {selectedImage && (
+          <div
+            onClick={() =>
+              setSelectedImage(null)
+            }
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,.9)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10000,
+              padding: "30px",
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
+              style={{
+                position: "absolute",
+                top: "25px",
+                right: "30px",
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                border: "none",
+                background: "#d4b483",
+                color: "#111",
+                fontSize: "28px",
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+
+            <img
+              src={selectedImage}
+              alt={product.name}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+              style={{
+                maxWidth: "95%",
+                maxHeight: "90vh",
+                objectFit: "contain",
+                borderRadius: "15px",
+              }}
+            />
+          </div>
+        )}
+
+        {/* INTERIOR MODAL */}
+
+        {selectedInterior && (
+          <div
+            onClick={() =>
+              setSelectedInterior(null)
+            }
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,.9)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10000,
+              padding: "30px",
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedInterior(null);
+              }}
+              style={{
+                position: "absolute",
+                top: "25px",
+                right: "30px",
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                border: "none",
+                background: "#d4b483",
+                color: "#111",
+                fontSize: "28px",
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+
+            <img
+              src={selectedInterior}
+              alt={`${product.name} интерьер`}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+              style={{
+                maxWidth: "95%",
+                maxHeight: "90vh",
+                objectFit: "contain",
+                borderRadius: "15px",
+              }}
+            />
+          </div>
+        )}
       </div>
-
-      {/* MAIN IMAGE MODAL */}
-
-      {selectedImage && (
-        <div
-          onClick={() => setSelectedImage(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,.9)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 10000,
-            padding: "30px",
-          }}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedImage(null);
-            }}
-            style={{
-              position: "absolute",
-              top: "25px",
-              right: "30px",
-              width: "50px",
-              height: "50px",
-              borderRadius: "50%",
-              border: "none",
-              background: "#d4b483",
-              color: "#111",
-              fontSize: "28px",
-              cursor: "pointer",
-            }}
-          >
-            ×
-          </button>
-
-          <img
-            src={selectedImage}
-            alt={product.name}
-            onClick={(e) =>
-              e.stopPropagation()
-            }
-            style={{
-              maxWidth: "95%",
-              maxHeight: "90vh",
-              objectFit: "contain",
-              borderRadius: "15px",
-            }}
-          />
-        </div>
-      )}
-
-      {/* INTERIOR MODAL */}
-
-      {selectedInterior && (
-        <div
-          onClick={() =>
-            setSelectedInterior(null)
-          }
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,.9)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 10000,
-            padding: "30px",
-          }}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedInterior(null);
-            }}
-            style={{
-              position: "absolute",
-              top: "25px",
-              right: "30px",
-              width: "50px",
-              height: "50px",
-              borderRadius: "50%",
-              border: "none",
-              background: "#d4b483",
-              color: "#111",
-              fontSize: "28px",
-              cursor: "pointer",
-            }}
-          >
-            ×
-          </button>
-
-          <img
-            src={selectedInterior}
-            alt="Интерьер"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
-            style={{
-              maxWidth: "95%",
-              maxHeight: "90vh",
-              objectFit: "contain",
-              borderRadius: "15px",
-            }}
-          />
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 

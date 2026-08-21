@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const ProductSchema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema(
+  {
   // Основное
   name: {
     type: String,
@@ -97,10 +98,15 @@ slug: {
     default: true,
   },
 
+
+
   createdAt: {
     type: Date,
     default: Date.now,
   },
+},
+{
+  timestamps: true,
 });
 
 

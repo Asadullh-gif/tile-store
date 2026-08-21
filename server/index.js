@@ -12,6 +12,7 @@ require("dotenv").config({
 });
 
 const app = express();
+const SITE_URL = "https://tile-store-b7wm.vercel.app";
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +28,27 @@ function createSlug(text) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
+
+async function createUniqueSlug(name, excludeId = null) {
+  let slug = createSlug(name);
+
+  const query = {
+    slug,
+  };
+
+  if (excludeId) {
+    query._id = { $ne: excludeId };
+  }
+
+  const existing = await Product.findOne(query);
+
+  if (existing) {
+    slug = `${slug}-${Date.now().toString().slice(-6)}`;
+  }
+
+  return slug;
+}
+
 
 // =========================
 // CLOUDINARY
@@ -102,7 +124,7 @@ app.post(
 
       const product = new Product({
         name: req.body.name,
-        slug: createSlug(req.body.name),
+        slug: await createUniqueSlug(req.body.name),
         price: req.body.price,
         size: req.body.size,
         material: req.body.material,
@@ -163,7 +185,7 @@ app.put(
 
       const updateData = {
         name: req.body.name,
-        slug: createSlug(req.body.name),
+        slug: await createUniqueSlug(req.body.name, req.params.id),
         price: req.body.price,
         size: req.body.size,
         material: req.body.material,
@@ -305,6 +327,96 @@ app.get("/products/slug/:slug", async (req, res) => {
     res.status(500).json({
       message: err.message,
     });
+  }
+});
+
+
+
+// =========================
+// SITEMAP.XML
+// =========================
+
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    console.log("🔥 GET /sitemap.xml");
+
+    const products = await Product.find({
+      active: true,
+      slug: { $exists: true, $ne: "" },
+    })
+      .select("slug updatedAt createdAt")
+      .lean();
+
+    const staticPages = [
+      {
+        url: "/",
+        priority: "1.0",
+      },
+      {
+        url: "/catalog",
+        priority: "0.9",
+      },
+    ];
+
+    const productPages = products.map((product) => ({
+      url: `/product/${product.slug}`,
+      lastmod:
+        product.updatedAt ||
+        product.createdAt ||
+        new Date(),
+      priority: "0.8",
+    }));
+
+    const allPages = [
+      ...staticPages,
+      ...productPages,
+    ];
+
+    const urls = allPages
+      .map((page) => {
+        const lastmod = page.lastmod
+          ? new Date(page.lastmod)
+              .toISOString()
+              .split("T")[0]
+          : null;
+
+        return `
+  <url>
+    <loc>${SITE_URL}${page.url}</loc>
+    ${
+      lastmod
+        ? `<lastmod>${lastmod}</lastmod>`
+        : ""
+    }
+    <changefreq>weekly</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`;
+      })
+      .join("");
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+${urls}
+</urlset>`;
+
+    res.header(
+      "Content-Type",
+      "application/xml"
+    );
+
+    res.send(sitemap);
+
+  } catch (err) {
+    console.error(
+      "❌ Ошибка создания sitemap:",
+      err
+    );
+
+    res.status(500).send(
+      "Ошибка создания sitemap"
+    );
   }
 });
 
