@@ -275,6 +275,40 @@ app.get("/products/:id", async (req, res) => {
 });
 
 
+// =========================
+// ПОЛУЧИТЬ ТОВАР ПО SLUG
+// =========================
+
+app.get("/products/slug/:slug", async (req, res) => {
+  try {
+    console.log("🔥 GET /products/slug/:slug");
+    console.log("SLUG:", req.params.slug);
+
+    const product = await Product.findOne({
+      slug: req.params.slug,
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Товар не найден",
+      });
+    }
+
+    res.json(product);
+
+  } catch (err) {
+    console.error(
+      "❌ Ошибка получения товара по slug:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
 
 // =========================
 // УДАЛИТЬ ТОВАР
