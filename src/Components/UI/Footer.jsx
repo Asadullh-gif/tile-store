@@ -19,7 +19,7 @@ export default function Footer() {
         TileStore
       </h1>
 
-      <p>📍 Алматы, Казахстан</p>
+      <p>📍 Алматы, Строй сити ангар №132 </p>
       <p>📞 +7 (707) 912-92-28</p>
 
       <div
@@ -50,6 +50,55 @@ export default function Footer() {
             color="#25D366"
           />
         </a>
+<a
+  href="https://www.google.com/maps/search/?api=1&query=ТВОЙ_АДРЕС"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "14px",
+    textDecoration: "none",
+    color: "#222",
+  }}
+>
+  <div
+    style={{
+      width: "44px",
+      height: "44px",
+      borderRadius: "50%",
+      background: "#d4b483",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+    }}
+  >
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  </div>
+
+  <div>
+    <div style={{ fontWeight: "700" }}>
+      Наш магазин
+    </div>
+
+    <div style={{ color: "#777", marginTop: "3px" }}>
+      Алматы, ул. Абая, 25
+    </div>
+  </div>
+</a>
+
+
       </div>
 
       <p
