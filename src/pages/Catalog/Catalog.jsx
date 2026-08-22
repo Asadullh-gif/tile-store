@@ -467,7 +467,7 @@ function Catalog({ cart, setCart }) {
 
 
               <Link
-  to={`/product/${item._slug}`}
+  to={`/product/${item.slug}`}
   style={{
     display: "block",
     width: "100%",
