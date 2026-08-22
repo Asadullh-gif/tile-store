@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/sitemap.xml",
+      "destination": "https://my-backend-j4fz.onrender.com/sitemap.xml"
     }
   ]
 }
