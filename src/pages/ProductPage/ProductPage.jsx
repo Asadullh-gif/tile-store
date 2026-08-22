@@ -101,34 +101,34 @@ function ProductPage({ cart, setCart }) {
   }
 
   // =========================
-  // SEO DATA
-  // =========================
+// SEO DATA
+// =========================
 
-  const productUrl = `${SITE_URL}/product/${product.slug}`;
+const productUrl = `${SITE_URL}/product/${product.slug}`;
 
-  const productSize = product.size || "плитка";
+const productSize = product.size || "плитка";
 
-  const productMaterial =
-    product.material || "керамическая плитка";
+const productMaterial =
+  product.material || "керамическая плитка";
 
-  const productDescription =
-    product.description ||
-    `${product.name} — ${productMaterial}, размер ${productSize}. Цена ${product.price} ₸. Купить в TileStore.`;
+const productDescription =
+  product.description ||
+  `${product.name} — ${productMaterial}, размер ${productSize}. Цена ${product.price} ₸. Купить в TileStore.`;
 
-  const productTitle =
-    `${product.name} — ${productSize} | TileStore`;
+const productTitle =
+  `${product.name} — ${productSize} | TileStore`;
 
-  const productImages = [
-    product.image,
-    ...(Array.isArray(product.interiorImages)
-      ? product.interiorImages
-      : []),
-  ].filter(Boolean);
+const productImages = [
+  product.image,
+  ...(Array.isArray(product.interiorImages)
+    ? product.interiorImages
+    : []),
+].filter(Boolean);
 
-  const availability =
-    product.stock > 0
-      ? "https://schema.org/InStock"
-      : "https://schema.org/OutOfStock";
+const availability =
+  product.stock > 0
+    ? "https://schema.org/InStock"
+    : "https://schema.org/OutOfStock";
 
   // =========================
   // PRODUCT JSON-LD
@@ -196,58 +196,63 @@ function ProductPage({ cart, setCart }) {
       ========================= */}
 
       <Helmet>
-        <title>{productTitle}</title>
+  <title>{productTitle}</title>
 
-        <meta
-          name="description"
-          content={productDescription}
-        />
+  <meta
+    name="description"
+    content={productDescription}
+  />
 
-        <link
-          rel="canonical"
-          href={productUrl}
-        />
+  <meta
+    name="robots"
+    content="index, follow"
+  />
 
-        {/* Open Graph */}
+  <link
+    rel="canonical"
+    href={productUrl}
+  />
 
-        <meta
-          property="og:title"
-          content={productTitle}
-        />
+  {/* Open Graph */}
 
-        <meta
-          property="og:description"
-          content={productDescription}
-        />
+  <meta
+    property="og:title"
+    content={productTitle}
+  />
 
-        <meta
-          property="og:url"
-          content={productUrl}
-        />
+  <meta
+    property="og:description"
+    content={productDescription}
+  />
 
-        <meta
-          property="og:type"
-          content="product"
-        />
+  <meta
+    property="og:url"
+    content={productUrl}
+  />
 
-        {product.image && (
-          <meta
-            property="og:image"
-            content={product.image}
-          />
-        )}
+  <meta
+    property="og:type"
+    content="product"
+  />
 
-        <meta
-          property="og:site_name"
-          content="TileStore"
-        />
+  <meta
+    property="og:site_name"
+    content="TileStore"
+  />
 
-        {/* Product JSON-LD */}
+  {product.image && (
+    <meta
+      property="og:image"
+      content={product.image}
+    />
+  )}
 
-        <script type="application/ld+json">
-          {JSON.stringify(productSchema)}
-        </script>
-      </Helmet>
+  {/* Product JSON-LD */}
+
+  <script type="application/ld+json">
+    {JSON.stringify(productSchema)}
+  </script>
+</Helmet>
 
       {/* =========================
           PAGE
