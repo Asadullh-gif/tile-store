@@ -87,20 +87,12 @@ export default function Footer() {
     </svg>
   </div>
 
-  <div>
-    <div style={{ fontWeight: "700" }}>
-      Наш магазин
-    </div>
 
     <div style={{ color: "#777", marginTop: "3px" }}>
       Алматы, Строй сити ангар №132
     </div>
-  </div>
-</a>
-
-
+    </a>
       </div>
-
       <p
         style={{
           marginTop: "30px",
