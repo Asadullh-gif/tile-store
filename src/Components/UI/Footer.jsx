@@ -51,7 +51,7 @@ export default function Footer() {
           />
         </a>
 <a
-  href="https://www.google.com/maps/search/?api=1&query=ТВОЙ_АДРЕС"
+  href="https://www.google.com/maps/search/?api=1&query=43.274255, 76.883584"
   target="_blank"
   rel="noopener noreferrer"
   style={{
@@ -93,7 +93,7 @@ export default function Footer() {
     </div>
 
     <div style={{ color: "#777", marginTop: "3px" }}>
-      Алматы, ул. Абая, 25
+      Алматы, Строй сити ангар №132
     </div>
   </div>
 </a>
