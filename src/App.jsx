@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import{Helmet} from "react-helmet";
+import{Helmet} from "react-helmet-async";
 import heron from "./assets/heron.png"
 import bath from "./assets/bath.jpg";
 import kitchen from "./assets/kitchen.jpg";
