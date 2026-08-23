@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
+import {Helmet} from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 function Catalog({ cart, setCart }) {
+
+const siteUrl = "https://tile-store-b7wm.vercel.app";
+
+const catalogTitle = "Каталог плитки и керамогранита — TileStore";
+
+const catalogDescription =
+  "Каталог плитки и керамогранита TileStore. Плитка для ванной, кухни, гостиной, спальни и террасы. Большой выбор коллекций и размеров.";
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   // Галерея интерьеров
@@ -136,7 +145,47 @@ function Catalog({ cart, setCart }) {
     setInteriorIndex(0);
   };
 
-  return (
+return (
+  <>
+    <Helmet>
+      <title>{catalogTitle}</title>
+
+      <meta
+        name="description"
+        content={catalogDescription}
+      />
+
+      <link
+        rel="canonical"
+        href={`${siteUrl}/catalog`}
+      />
+
+      <meta
+        property="og:title"
+        content={catalogTitle}
+      />
+
+      <meta
+        property="og:description"
+        content={catalogDescription}
+      />
+
+      <meta
+        property="og:url"
+        content={`${siteUrl}/catalog`}
+      />
+
+      <meta
+        property="og:type"
+        content="website"
+      />
+
+      <meta
+        property="og:site_name"
+        content="TileStore"
+      />
+    </Helmet>
+
     <div
       style={{
         background: "#111",
@@ -831,6 +880,7 @@ function Catalog({ cart, setCart }) {
       )}
 
     </div>
+    </>
   );
 }
 
