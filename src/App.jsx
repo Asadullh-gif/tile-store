@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import{Helmet} from "react-helmet";
 import heron from "./assets/heron.png"
 import bath from "./assets/bath.jpg";
 import kitchen from "./assets/kitchen.jpg";
@@ -88,6 +89,28 @@ function NavItem({ to, children }) {
 }
 
 function Home({cart, setCart}) {
+
+
+  const siteUrl = "https://tile-store-b7wm.vercel.app";
+
+  const homeTitle =
+    "Кафель и керамическая плитка | TileStore";
+
+  const homeDescription =
+    "Купить кафель и керамическую плитку в TileStore. Большой выбор плитки, керамогранита и коллекций для ванной, кухни и интерьера.";
+
+  const homeSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "TileStore",
+    url: siteUrl,
+    description: homeDescription,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/catalog?search={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
   
   const [selectedImage, setSelectedImage] = useState(null);
 const [search, setSearch] = useState("");
@@ -144,6 +167,49 @@ const addToCart = (product) => {
   alert("Товар добавлен в корзину");
 };
   return(
+    <>
+      <Helmet>
+        <title>{homeTitle}</title>
+
+        <meta
+          name="description"
+          content={homeDescription}
+        />
+
+        <link
+          rel="canonical"
+          href={siteUrl}
+        />
+
+        <meta
+          property="og:title"
+          content={homeTitle}
+        />
+
+        <meta
+          property="og:description"
+          content={homeDescription}
+        />
+
+        <meta
+          property="og:url"
+          content={siteUrl}
+        />
+
+        <meta
+          property="og:type"
+          content="website"
+        />
+
+        <meta
+          property="og:site_name"
+          content="TileStore"
+        />
+
+        <script type="application/ld+json">
+          {JSON.stringify(homeSchema)}
+        </script>
+      </Helmet>
 
       
           
@@ -1049,6 +1115,7 @@ className="des"
 
 
 </div>
+</>
    
   );
 }
