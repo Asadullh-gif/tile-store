@@ -51,7 +51,7 @@ export default function Footer() {
           />
         </a>
 <a
-  href="https://www.google.com/maps/search/?api=1&query=43.274255, 76.883584"
+  href="https://www.google.com/maps/search/?api=1&query=43.270632, 76.879655"
   target="_blank"
   rel="noopener noreferrer"
   style={{
