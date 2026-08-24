@@ -341,22 +341,29 @@ app.get("/sitemap.xml", async (req, res) => {
     console.log("🔥 GET /sitemap.xml");
 
     const products = await Product.find({
-      active: true,
-      slug: { $exists: true, $ne: "" },
-    })
-      .select("slug updatedAt createdAt")
-      .lean();
+  slug: { $exists: true, $ne: "" },
+})
+  .select("slug updatedAt createdAt")
+  .lean();
 
     const staticPages = [
-      {
-        url: "/",
-        priority: "1.0",
-      },
-      {
-        url: "/catalog",
-        priority: "0.9",
-      },
-    ];
+  {
+    url: "/",
+    priority: "1.0",
+  },
+  {
+    url: "/catalog",
+    priority: "0.9",
+  },
+  {
+    url: "/collections",
+    priority: "0.8",
+  },
+  {
+    url: "/constructor",
+    priority: "0.7",
+  },
+];
 
     const productPages = products.map((product) => ({
       url: `/product/${product.slug}`,
