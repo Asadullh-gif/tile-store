@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tile-store-b7wm.vercel.app/sitemap.xml
