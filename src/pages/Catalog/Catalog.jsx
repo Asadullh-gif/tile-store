@@ -187,6 +187,7 @@ return (
     </Helmet>
 
     <div
+    className="catalog-page"
       style={{
         background: "#111",
         minHeight: "100vh",
@@ -421,6 +422,7 @@ return (
       ========================= */}
 
       <div
+      className="catalog-grid"
         style={{
           display: "grid",
           gridTemplateColumns:
@@ -441,6 +443,7 @@ return (
             {/* ГЛАВНОЕ ФОТО */}
 
             <img
+            className="catalog-main-image"
               src={item.image}
               alt={item.name}
               onClick={() =>

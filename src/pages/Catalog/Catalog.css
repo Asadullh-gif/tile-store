@@ -1,0 +1,249 @@
+/* =========================================
+   МОБИЛЬНАЯ ВЕРСИЯ КАТАЛОГА
+   Старый дизайн ПК НЕ ТРОГАЕМ
+========================================= */
+
+@media (max-width: 768px) {
+
+  /* Основная страница */
+  .catalog-page {
+    padding: 90px 15px 30px !important;
+    overflow-x: hidden;
+  }
+
+
+  /* =========================================
+     КНОПКА ГЛАВНАЯ
+  ========================================= */
+
+  .catalog-page > a {
+    position: fixed !important;
+
+    top: 20px !important;
+    left: 15px !important;
+
+    padding: 12px 20px !important;
+
+    font-size: 18px !important;
+
+    z-index: 9999;
+  }
+
+
+  /* =========================================
+     ЗАГОЛОВОК
+  ========================================= */
+
+  .catalog-page h1 {
+    font-size: 32px !important;
+    line-height: 1.15 !important;
+
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+
+    text-align: center;
+  }
+
+  .catalog-page > p {
+    font-size: 15px !important;
+    margin-bottom: 25px !important;
+  }
+
+
+  /* =========================================
+     КАТЕГОРИИ
+  ========================================= */
+
+  .catalog-page button {
+    box-sizing: border-box;
+  }
+
+
+  /* Блок категорий */
+  .catalog-page > div {
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================
+     ПОИСК И СОРТИРОВКА
+  ========================================= */
+
+  .catalog-page input[type="text"] {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box;
+
+    padding: 15px !important;
+
+    font-size: 16px !important;
+
+    border-radius: 15px !important;
+  }
+
+
+  .catalog-page select {
+    width: 100% !important;
+    box-sizing: border-box;
+
+    padding: 15px !important;
+
+    font-size: 16px !important;
+  }
+
+
+  /* Цена от / до */
+  .catalog-page input[type="number"] {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box;
+
+    padding: 15px !important;
+
+    font-size: 16px !important;
+  }
+
+
+  /* =========================================
+     КАРТОЧКИ ТОВАРОВ
+  ========================================= */
+
+  .catalog-page > div:last-of-type {
+    grid-template-columns: 1fr !important;
+
+    gap: 20px !important;
+  }
+
+
+  /* =========================================
+     ИЗОБРАЖЕНИЯ ТОВАРОВ
+  ========================================= */
+
+  .catalog-page img {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================
+     КНОПКИ ТОВАРА
+  ========================================= */
+
+  .catalog-page button {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================
+   ОЧЕНЬ МАЛЕНЬКИЕ ТЕЛЕФОНЫ
+========================================= */
+
+@media (max-width: 480px) {
+
+  .catalog-page {
+    padding: 85px 12px 25px !important;
+  }
+
+
+  .catalog-page h1 {
+    font-size: 28px !important;
+  }
+
+
+  .catalog-page > p {
+    font-size: 14px !important;
+  }
+
+
+  /* Категории */
+  .catalog-page button {
+    font-size: 15px !important;
+  }
+
+
+  /* Поиск */
+  .catalog-page input[type="text"] {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+
+
+  /* Сортировка */
+  .catalog-page select {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+
+
+  /* Цена */
+  .catalog-page input[type="number"] {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+}
+
+
+.room-filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .room-filters {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px !important;
+
+    margin: 20px 0 !important;
+  }
+
+  .room-filters button {
+    width: 100% !important;
+
+    padding: 12px 8px !important;
+
+    font-size: 14px !important;
+
+    border-radius: 14px !important;
+  }
+
+  .room-filters button span {
+    font-size: 20px !important;
+  }
+}
+
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+@media (max-width: 768px) {
+
+  .products-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+
+.product-main-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+
+  .product-main-image {
+    height: 230px !important;
+    border-radius: 15px !important;
+  }
+}
+
+
