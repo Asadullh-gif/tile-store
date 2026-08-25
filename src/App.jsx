@@ -15,7 +15,7 @@ import Collections from "./pages/Collections/collections.jsx";
 import Constructor from "./pages/Constructor/Constructor.jsx";
 import Footer from "./Components/UI/Footer";
 import ProductPage from "./pages/ProductPage/ProductPage.jsx";
-
+import "./App.css";
 
 
 const linkStyle = {
