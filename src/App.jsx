@@ -542,13 +542,6 @@ className="des"
       🛒 Корзина
     </Link>
 
-    <a
-      href="#contacts"
-      onClick={() => setMobileMenu(false)}
-    >
-      📞 Контакты
-    </a>
-
   </div>
 )}
 
