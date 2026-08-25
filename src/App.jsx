@@ -359,7 +359,6 @@ const addToCart = (product) => {
 
 <NavItem to="/collections">Коллекции</NavItem>
 
-<NavItem to="/contacts">Контакты</NavItem>
 
   <Link
     to="/cart"
